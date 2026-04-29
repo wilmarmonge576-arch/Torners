@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gran Torneo de Juegos</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--fire:#ff4500;--gold:#ffd700;--electric:#00f0ff;--dark:#0a0a0f;--panel:#12121e}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--dark);color:#fff;font-family:'Rajdhani',sans-serif;overflow-x:hidden;min-height:100vh}
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(255,69,0,.25) 0%,transparent 70%),radial-gradient(ellipse 60% 40% at 80% 100%,rgba(0,240,255,.15) 0%,transparent 60%);pointer-events:none;z-index:0}
+  .stars{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+  .star{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;animation:twinkle var(--d,3s) infinite alternate;opacity:.5}
+  @keyframes twinkle{to{opacity:1;transform:scale(1.5)}}
+  .container{position:relative;z-index:1;max-width:700px;margin:0 auto;padding:20px}
+  header{text-align:center;padding:40px 0 20px}
+  .badge{display:inline-block;background:linear-gradient(90deg,var(--fire),var(--gold));color:#000;font-family:'Bebas Neue',sans-serif;font-size:.85rem;letter-spacing:3px;padding:4px 18px;clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%);margin-bottom:14px;animation:pulse-badge 2s infinite}
+  @keyframes pulse-badge{0%,100%{opacity:1}50%{opacity:.75}}
+  h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,10vw,5.5rem);line-height:.95;letter-spacing:2px;text-transform:uppercase}
+  h1 .line1{color:#fff;display:block}
+  h1 .line2{display:block;background:linear-gradient(90deg,var(--fire),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 20px rgba(255,100,0,.7))}
+  .subtitle{font-size:1.1rem;color:rgba(255,255,255,.65);margin-top:12px;letter-spacing:1px}
+  .hype-section{margin:30px 0;background:var(--panel);border:1px solid rgba(255,69,0,.3);border-radius:12px;padding:20px 24px;position:relative;overflow:hidden}
+  .hype-section::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--fire),var(--gold),transparent)}
+  .hype-label{font-size:.75rem;letter-spacing:3px;color:var(--electric);text-transform:uppercase;margin-bottom:8px}
+  .meter-wrap{display:flex;align-items:center;gap:12px}
+  .meter-bar{flex:1;height:14px;background:rgba(255,255,255,.08);border-radius:7px;overflow:hidden;border:1px solid rgba(255,255,255,.1)}
+  .meter-fill{height:100%;width:0%;background:linear-gradient(90deg,#ff4500,#ffd700,#fff);border-radius:7px;box-shadow:0 0 12px rgba(255,100,0,.8);animation:fill-meter 2.5s ease forwards .5s}
+  @keyframes fill-meter{to{width:95%}}
+  .meter-text{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--gold);white-space:nowrap}
+  .prizes{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:24px 0}
+  .prize-card{background:var(--panel);border-radius:10px;padding:16px 10px;text-align:center;border:1px solid rgba(255,255,255,.07);transition:transform .2s,border-color .2s}
+  .prize-card:hover{transform:translateY(-4px);border-color:var(--gold)}
+  .prize-icon{font-size:2rem}
+  .prize-place{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;margin:4px 0 2px}
+  .prize-card:nth-child(1) .prize-place{color:var(--gold)}
+  .prize-card:nth-child(2) .prize-place{color:#c0c0c0}
+  .prize-card:nth-child(3) .prize-place{color:#cd7f32}
+  .prize-amount{font-size:.9rem;color:rgba(255,255,255,.6)}
+  .countdown-section{background:var(--panel);border:1px solid rgba(0,240,255,.25);border-radius:12px;padding:24px 20px;text-align:center;margin:24px 0}
+  .cd-label{font-size:.75rem;letter-spacing:3px;color:var(--electric);margin-bottom:12px}
+  .cd-pronto{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--gold);letter-spacing:4px;text-shadow:0 0 20px rgba(255,215,0,.5);animation:pulse-badge 2s infinite}
+  .cd-sub{font-size:.85rem;color:rgba(255,255,255,.4);margin-top:8px;letter-spacing:2px}
+  .form-section{background:var(--panel);border:1px solid rgba(255,69,0,.25);border-radius:16px;padding:28px 24px;position:relative;overflow:hidden}
+  .form-section::after{content:'⚡';position:absolute;font-size:8rem;opacity:.03;right:-20px;top:50%;transform:translateY(-50%);pointer-events:none}
+  .form-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;margin-bottom:20px;color:var(--gold);letter-spacing:1px}
+  .field{margin-bottom:16px}
+  .field label{display:block;font-size:.78rem;letter-spacing:2px;color:rgba(255,255,255,.5);margin-bottom:6px;text-transform:uppercase}
+  .field input,.field select{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:12px 14px;color:#fff;font-family:'Rajdhani',sans-serif;font-size:1rem;transition:border-color .2s,box-shadow .2s;outline:none}
+  .field input:focus,.field select:focus{border-color:var(--fire);box-shadow:0 0 0 3px rgba(255,69,0,.15)}
+  .field select option{background:#1a1a2e}
+  .btn-inscribirse{width:100%;margin-top:8px;padding:16px;background:linear-gradient(135deg,var(--fire) 0%,#ff8c00 50%,var(--gold) 100%);border:none;border-radius:10px;color:#000;font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:3px;cursor:pointer;position:relative;overflow:hidden;transition:transform .15s,box-shadow .15s;box-shadow:0 4px 20px rgba(255,69,0,.5)}
+  .btn-inscribirse::before{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:rgba(255,255,255,.25);transform:skewX(-20deg);animation:shine 3s infinite 1s}
+  @keyframes shine{to{left:160%}}
+  .btn-inscribirse:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(255,100,0,.7)}
+  .btn-inscribirse:active{transform:scale(.98)}
+  .btn-inscribirse:disabled{opacity:.6;cursor:not-allowed;transform:none}
+  .spinner{display:inline-block;width:20px;height:20px;border:3px solid rgba(0,0,0,.3);border-top-color:#000;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:8px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .error-msg{color:#ff6b6b;font-size:.85rem;margin-top:8px;display:none}
+  .error-msg.show{display:block}
+  .success-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;align-items:center;justify-content:center;flex-direction:column;gap:16px;text-align:center;padding:20px}
+  .success-overlay.show{display:flex;animation:fadeIn .4s ease}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .success-icon{font-size:5rem;animation:bounce .6s ease}
+  @keyframes bounce{0%{transform:scale(0)}60%{transform:scale(1.2)}100%{transform:scale(1)}}
+  .success-title{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;background:linear-gradient(90deg,var(--fire),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .success-msg{color:rgba(255,255,255,.7);font-size:1.1rem;max-width:320px}
+  .success-name{color:var(--gold);font-weight:700}
+  .btn-close{margin-top:10px;padding:10px 32px;background:linear-gradient(90deg,var(--fire),var(--gold));border:none;border-radius:8px;color:#000;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;cursor:pointer;letter-spacing:2px}
+  .flame{position:fixed;font-size:1.5rem;pointer-events:none;animation:float-up var(--dur,4s) ease-in infinite;opacity:0;z-index:0}
+  @keyframes float-up{0%{transform:translateY(100vh) rotate(0deg);opacity:.6}100%{transform:translateY(-20vh) rotate(20deg);opacity:0}}
+  footer{text-align:center;padding:30px 0 20px;color:rgba(255,255,255,.2);font-size:.8rem;letter-spacing:2px}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+<div class="flame" style="left:5%;--dur:5s;animation-delay:0s">🔥</div>
+<div class="flame" style="left:15%;--dur:6s;animation-delay:1s">⚡</div>
+<div class="flame" style="left:80%;--dur:4.5s;animation-delay:2s">🔥</div>
+<div class="flame" style="left:90%;--dur:7s;animation-delay:.5s">⚡</div>
+<div class="flame" style="left:50%;--dur:5.5s;animation-delay:3s">🔥</div>
+
+<div class="container">
+  <header>
+    <div class="badge">🎮 EVENTO ESCOLAR ÉPICO</div>
+    <h1><span class="line1">Gran Torneo</span><span class="line2">De Juegos</span></h1>
+    <p class="subtitle">¿Tienes lo que se necesita para ser el CAMPEÓN?</p>
+  </header>
+
+  <div class="hype-section">
+    <div class="hype-label">⚡ Nivel de hype</div>
+    <div class="meter-wrap">
+      <div class="meter-bar"><div class="meter-fill"></div></div>
+      <div class="meter-text">MÁXIMO 🔥</div>
+    </div>
+  </div>
+
+  <div class="prizes">
+    <div class="prize-card"><div class="prize-icon">🥇</div><div class="prize-place">1.º Lugar</div><div class="prize-amount">Premio épico</div></div>
+    <div class="prize-card"><div class="prize-icon">🥈</div><div class="prize-place">2.º Lugar</div><div class="prize-amount">Gran premio</div></div>
+    <div class="prize-card"><div class="prize-icon">🥉</div><div class="prize-place">3.º Lugar</div><div class="prize-amount">Buen premio</div></div>
+  </div>
+
+  <div class="countdown-section">
+    <div class="cd-label">📅 Fecha del torneo</div>
+    <div class="cd-pronto">¡PRÓXIMAMENTE!</div>
+    <div class="cd-sub">La fecha se anunciará muy pronto — ¡estate atento!</div>
+  </div>
+
+  <div class="form-section">
+    <div class="form-title">⚔️ Inscríbete ahora</div>
+    <div class="field"><label>Nombre completo</label><input type="text" id="nombre" placeholder="Tu nombre de guerrero..."/></div>
+    <div class="field">
+      <label>Grado / Sección</label>
+      <select id="grado">
+        <option value="">— Selecciona tu nivel —</option>
+        <option>7.º</option><option>8.º</option><option>9.º</option>
+        <option>10.º</option><option>11.º</option><option>12.º</option>
+      </select>
+    </div>
+    <div class="field"><label>Juego favorito</label><input type="text" id="juego" placeholder="Ej: Fortnite, FIFA, Minecraft..."/></div>
+    <div class="field"><label>WhatsApp / Contacto</label><input type="text" id="contacto" placeholder="Para mandarte info del torneo"/></div>
+    <div class="error-msg" id="errorMsg">⚠️ Completa tu nombre, grado y juego favorito.</div>
+    <button class="btn-inscribirse" id="btnInscribirse" onclick="inscribirse()">🔥 ¡YO QUIERO JUGAR! 🔥</button>
+  </div>
+
+  <footer>GRAN TORNEO DE JUEGOS &nbsp;·&nbsp; PRÓXIMAMENTE &nbsp;·&nbsp; ⚡</footer>
+</div>
+
+<div class="success-overlay" id="success">
+  <div class="success-icon">🏆</div>
+  <div class="success-title">¡ERES OFICIAL!</div>
+  <div class="success-msg">¡<span class="success-name" id="successName"></span>, tu inscripción fue guardada!,Toma captura y muestralo Prepárate para ser el mejor del colegio. ¡Que empiece la batalla!</div>
+  <button class="btn-close" onclick="document.getElementById('success').classList.remove('show')">LISTO</button>
+</div>
+
+<script>
+  const SHEET_URL = "https://script.google.com/macros/s/AKfycbykoz-zMxyG4SXXKLaZ4-hm6ZZ4XAKdYgtQxUPUYPMYvULdgRHp2Ld8kmkUdoUjTWBY/exec";
+
+  const starsEl = document.getElementById('stars');
+  for(let i=0;i<80;i++){const s=document.createElement('div');s.className='star';s.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;animation-delay:${Math.random()*3}s`;starsEl.appendChild(s);}
+
+  async function inscribirse(){
+    const nombre=document.getElementById('nombre').value.trim();
+    const grado=document.getElementById('grado').value;
+    const juego=document.getElementById('juego').value.trim();
+    const contacto=document.getElementById('contacto').value.trim();
+    const errEl=document.getElementById('errorMsg');
+    const btn=document.getElementById('btnInscribirse');
+    if(!nombre||!grado||!juego){errEl.classList.add('show');return;}
+    errEl.classList.remove('show');
+    btn.disabled=true;
+    btn.innerHTML='<span class="spinner"></span> GUARDANDO...';
+    try{
+      await fetch(`${SHEET_URL}?nombre=${encodeURIComponent(nombre)}&grado=${encodeURIComponent(grado)}&juego=${encodeURIComponent(juego)}&contacto=${encodeURIComponent(contacto)}`,{method:'GET',mode:'no-cors'});
+    }catch(e){console.log('Enviado');}
+    document.getElementById('successName').textContent=nombre;
+    document.getElementById('success').classList.add('show');
+    btn.disabled=false;
+    btn.innerHTML='🔥 ¡YO QUIERO JUGAR! 🔥';
+    ['nombre','juego','contacto'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('grado').value='';
+  }
+</script>
+</body>
+</html>
